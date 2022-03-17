@@ -30,5 +30,5 @@ jacocoTestReport {
         xml.required = true
     }
 }
-task stage(dependsOn: ['build', 'clean'])
-build.mustRunAfter clean
+task stage(dependsOn: ['installDist', 'clean'])
+installDist.mustRunAfter clean
