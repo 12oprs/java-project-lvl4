@@ -8,16 +8,16 @@ clean:
 build:
 	./gradlew clean build
 
-install: 
+install:
 	./gradlew clean install
 
-run-dist: 
+run-dist:
 	./build/install/app//bin/app
 
 run:
 	./gradlew run
 
-check-updates: 
+check-updates:
 	./gradlew dependencyUpdates
 
 test:
@@ -30,6 +30,9 @@ lint:
 	./gradlew checkstyleMain checkstyleTest
 
 build-run: build run
+
+migrations:
+	./gradlew generateMigrations
 
 list:
 	@grep '^[^#[:space:]].*:' Makefile
