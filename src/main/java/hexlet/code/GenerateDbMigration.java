@@ -10,7 +10,8 @@ public class GenerateDbMigration {
     public static void main(String[] args) throws IOException {
         org.apache.log4j.PropertyConfigurator.configure("log4j.properties");
         DbMigration dbMigration = DbMigration.create();
-        dbMigration.setPlatform(Platform.H2);
+        dbMigration.addPlatform(Platform.POSTGRES, "postgres");
+        dbMigration.addPlatform(Platform.H2, "h2");
         dbMigration.generateMigration();
     }
 

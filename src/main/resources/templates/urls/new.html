@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/application.html}">
+    
+    <section layout:fragment="header">
+        Доброго времени суток, глубокоуважаемый Юзер!
+    </section>
+
+    <section layout:fragment="content">
+        <div class="mb-3">
+            <label for="Input1" class="form-label">Введите URL</label>
+            <input type="text" class="form-control" id="Input1" placeholder="URL">
+          </div>
+    </section>  
+
+</html>

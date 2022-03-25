@@ -1,19 +1,21 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<head>
-  <title>Layout page</title>
-  <script src="common-script.js"></script>
-</head>
-<body>
-  <header>
-    <h1>Hello, world!</h1>
-  </header>
-  <section layout:fragment="content">
-    <p>awesome content here</p>
-  </section>
-  <footer>
-    <p>place for footer</p>
-    <p layout:fragment="custom-footer">Custom footer here</p>
-  </footer>  
-</body>
+<html   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/application.html}">
+    
+    <section layout:fragment="header">
+        Доброго времени суток, глубокоуважаемый Юзер!
+    </section>
+
+    <section layout:fragment="content">
+        <form class="row g-3" action="/urls" method="post">
+            <div class="mb-3">
+                <label for="Input1" class="form-label">Введи URL</label>
+                <input type="text" name="url" class="form-control" id="Input1"  placeholder="URL" th:value="${url}">
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary mb-3">Чекнуть</button>
+            </div>
+        </form>
+    </section>  
+
 </html>

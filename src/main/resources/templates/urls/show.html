@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/application.html}">
+    
+    <section layout:fragment="header">
+        <p th:object="${url}" th:text="'Сайт ' + *{protocol} + '://' + *{host} + ( (*{port} == null) ? '' : (':' + *{port}) )"></p>
+    </section>
+
+    <section layout:fragment="content">
+        <table class="table">
+            <tbody th:object="${url}">
+              <tr>
+                <td>ID</td>
+                <td th:text="*{id}"></td>
+              </tr>
+              <tr>
+                <td>Имя</td>
+                <td th:text="*{protocol} + '://' + *{host} + ( (*{port} == null) ? '' : (':' + *{port}) )" ></td>
+              </tr>
+              <tr>
+                <td>createdAt</td>
+                <td th:text="${#temporals.format(url.getCreatedAt(), 'dd/MMM/yyyy HH:mm')}"></td>
+              </tr>
+            </tbody>
+          </table>
+    </section>  
+
+</html>

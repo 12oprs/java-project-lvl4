@@ -12,10 +12,10 @@ install:
 	./gradlew clean install
 
 run-dist:
-	./build/install/app//bin/app
+	APP_ENV=production ./build/install/app//bin/app
 
 run:
-	./gradlew run
+	APP_ENV=development ./gradlew run
 
 check-updates:
 	./gradlew dependencyUpdates
