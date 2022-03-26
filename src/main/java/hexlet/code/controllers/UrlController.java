@@ -22,6 +22,7 @@ public class UrlController {
         try {
             inputURL = new URL(input);
         } catch (MalformedURLException e) {
+            ctx.status(400);
             ctx.sessionAttribute("flash", "Некорректный URL");
             ctx.sessionAttribute("flash-type", "danger");
             ctx.attribute("url", input);
@@ -39,6 +40,7 @@ public class UrlController {
             .exists();
 
         if (urlExist) {
+            ctx.status(409);
             ctx.sessionAttribute("flash", "Страница уже существует");
             ctx.sessionAttribute("flash-type", "warning");
             ctx.attribute("url", input);
@@ -50,7 +52,7 @@ public class UrlController {
         App.LOGGER.warn("before save");
         newUrl.save();
         App.LOGGER.warn("after save");
-
+        ctx.status(201);
         ctx.sessionAttribute("flash", "Страница успешно добавлена");
         ctx.sessionAttribute("flash-type", "success");
         App.LOGGER.warn("before redirect to urls");
@@ -62,6 +64,7 @@ public class UrlController {
 
         List<Url> listUrl = new QUrl().findList();
 
+        ctx.status(200);
         ctx.attribute("listUrl", listUrl);
         ctx.render("urls/index.html");
     };

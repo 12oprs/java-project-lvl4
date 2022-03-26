@@ -38,14 +38,17 @@ dependencies {
   implementation 'io.ebean:ebean-annotation:7.7'
   annotationProcessor 'io.ebean:querybean-generator:12.16.0'
 
-  implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359' //2.2.4
-  //implementation "jakarta.xml.bind:jakarta.xml.bind-api:2.3.2"
+  implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
   implementation "org.glassfish.jaxb:jaxb-runtime:2.3.2"
 
   implementation 'com.h2database:h2:2.1.210'
   implementation 'org.postgresql:postgresql:42.3.3'
   
   testImplementation 'io.ebean:ebean-test:12.16.0'
+   testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+  testImplementation 'org.junit.jupiter:junit-jupiter-params:5.8.2'
+  testImplementation 'org.assertj:assertj-core:3.22.0'
+  testImplementation 'com.konghq:unirest-java:3.13.6'
 }
 
 testlogger {
@@ -63,4 +66,8 @@ installDist.mustRunAfter clean
 task generateMigrations(type: JavaExec) {
   classpath = sourceSets.main.runtimeClasspath
   mainClass = "hexlet.code.GenerateDbMigration"
+}
+
+test {
+  useJUnitPlatform()
 }
