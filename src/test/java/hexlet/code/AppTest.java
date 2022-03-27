@@ -14,6 +14,10 @@ import io.javalin.Javalin;
 import io.ebean.DB;
 import io.ebean.Transaction;
 
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import java.io.IOException;
+
 import java.util.List;
 import hexlet.code.model.Url;
 import hexlet.code.model.query.QUrl;
@@ -22,19 +26,39 @@ class AppTest {
 
     private static Javalin app;
     private static Transaction transaction;
-    private static String baseUrl;
+    private static MockWebServer mockServer;
+    private static MockResponse mockResponse;
+    private static String serverBaseUrl;
 
     @BeforeAll
     public static void beforeAll() {
         app = App.getApp();
         app.start(0);
         int port = app.port();
-        baseUrl = "http://localhost:" + port;
+        String baseUrl = "http://localhost:" + port;
         Unirest.config().defaultBaseUrl(baseUrl);
+
+        mockServer = new MockWebServer();
+        mockResponse = new MockResponse()
+            .addHeader("Content-Type", "text/html;charset=utf-8")
+            .setBody("{}")
+            .setResponseCode(200);
+        mockServer.enqueue(mockResponse);
+        try {
+            mockServer.start();
+        } catch (IOException e) {
+
+        }
+        serverBaseUrl = mockServer.url("/").toString();
     }
 
     @AfterAll
     public static void afterAll() {
+        try {
+            mockServer.shutdown();
+        } catch (IOException e) {
+
+        }
         app.stop();
     }
 
@@ -98,5 +122,12 @@ class AppTest {
             .asString();
         assertThat(response.getStatus()).isEqualTo(200);
         assertThat(response.getBody()).contains(listUrl.get(randomIndex).getHost());
+    }
+
+    @Test
+    void testCheckUrl() {
+        HttpResponse<String> response = Unirest.get(serverBaseUrl)
+            .asString();
+        assertThat(response.getStatus()).isEqualTo(200);
     }
 }

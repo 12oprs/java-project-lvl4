@@ -3,8 +3,10 @@ package hexlet.code.model;
 import javax.persistence.Id;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.OneToMany;
 import io.ebean.annotation.WhenCreated;
 //import io.ebean.annotation.DbDefault;
+import java.util.List;
 import java.time.Instant;
 import io.ebean.Model;
 
@@ -24,6 +26,9 @@ public class Url extends Model {
 
     @WhenCreated
     private Instant createdAt;
+
+    @OneToMany
+    private List<UrlCheck> urlChecks;
 
     public Url(String newProtocol, String newHost, Integer newPort) {
         this.protocol = newProtocol;
@@ -49,5 +54,9 @@ public class Url extends Model {
 
     public final Instant getCreatedAt() {
         return createdAt;
+    }
+
+    public final List<UrlCheck> getUrlChecks() {
+        return urlChecks;
     }
 }

@@ -77,8 +77,12 @@ public class UrlController {
             ctx.sessionAttribute("flash", "URL не найден");
             ctx.sessionAttribute("flash-type", "danger");
         }
+        ctx.status(200);
         ctx.attribute("url", url);
         ctx.render("urls/show.html");
     };
 
+    public static Handler checkUrl = ctx -> {
+        ctx.render("urls/show.html");
+    };
 }

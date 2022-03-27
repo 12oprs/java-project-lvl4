@@ -8,5 +8,14 @@
             <column name="port" type="integer"/>
             <column name="created_at" type="timestamp" notnull="true"/>
         </createTable>
+        <createTable name="url_check" pkName="pk_url_check">
+            <column name="id" type="bigint" primaryKey="true"/>
+            <column name="status_code" type="integer" defaultValue="0" notnull="true"/>
+            <column name="title" type="varchar"/>
+            <column name="h1" type="varchar"/>
+            <column name="description" type="clob"/>
+            <column name="url_id" type="bigint" notnull="true" references="urls.id" foreignKeyName="fk_url_check_url_id" foreignKeyIndex="ix_url_check_url_id"/>
+            <column name="created_at" type="timestamp" notnull="true"/>
+        </createTable>
     </changeSet>
 </migration>
