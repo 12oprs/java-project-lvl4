@@ -4,6 +4,7 @@ import javax.persistence.Id;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Lob;
+import javax.persistence.JoinColumn;
 import io.ebean.annotation.WhenCreated;
 import io.ebean.annotation.DbDefault;
 import java.time.Instant;
@@ -25,11 +26,23 @@ public class UrlCheck extends Model {
     @Lob
     private String description;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false) @JoinColumn(name = "urls_id")
     private Url url;
 
     @WhenCreated
     private Instant createdAt;
+
+    public UrlCheck(int newStatusCode,
+                    String newTitle,
+                    String newH1,
+                    String newDescription,
+                    Url newUrl) {
+        this.statusCode = newStatusCode;
+        this.title = newTitle;
+        this.h1 = newH1;
+        this.description = newDescription;
+        this.url = newUrl;
+    }
 
     public final Long getId() {
         return id;

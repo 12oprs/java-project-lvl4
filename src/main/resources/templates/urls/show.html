@@ -3,7 +3,7 @@
         layout:decorate="~{layouts/application.html}">
     
     <section layout:fragment="header">
-        <p th:object="${url}" th:text="'Сайт ' + *{protocol} + '://' + *{host} + ( (*{port} == null) ? '' : (':' + *{port}) )"></p>
+        <p th:text="'Сайт ' + ${url.getPath()}"></p>
     </section>
 
     <section layout:fragment="content">
@@ -15,7 +15,7 @@
               </tr>
               <tr>
                 <td>Имя</td>
-                <td th:text="*{protocol} + '://' + *{host} + ( (*{port} == null) ? '' : (':' + *{port}) )" ></td>
+                <td th:text="${url.getPath()}" ></td>
               </tr>
               <tr>
                 <td>createdAt</td>
@@ -24,12 +24,13 @@
             </tbody>
           </table>
         <p>Проверки</p>
-        <form class="row g-3" action="/urls/${id}/checks" method="post">
+
+        <form class="row g-3" th:action="@{'/urls/' + ${url.getId()} + '/checks'}"  method="post">
             <div class="col-auto">
                 <button type="submit" class="btn btn-primary mb-3">Запустить проверку</button>
             </div>
         </form>
-
+        
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -41,13 +42,13 @@
                     <th scope="col">Дата проверки</th>
                 </tr>
             </thead>
-            <tbody th:each="urlCheck : ${url.getUrlChecks()}" th:object="${urlCheck}"></tbody>
+            <tbody th:each="urlCheck : ${urlChecks}" th:object="${urlCheck}">
               <tr>
                 <td th:text="*{id}" ></td>
                 <td th:text="*{statusCode}" ></td>
-                <td th:text="*{#strings.abbreviate(title, 10)}" ></td>
-                <td th:text="*{#strings.abbreviate(h1, 10)}" ></td>
-                <td th:text="*{#strings.abbreviate(description, 10)}" ></td>
+                <td th:text="*{#strings.abbreviate(title, 30)}" ></td>
+                <td th:text="*{#strings.abbreviate(h1, 30)}" ></td>
+                <td th:text="*{#strings.abbreviate(description, 30)}" ></td>
                 <td th:text="*{#temporals.format(createdAt, 'dd/MMM/yyyy HH:mm')}" ></td>
               </tr>
             </tbody>

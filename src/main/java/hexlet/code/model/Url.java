@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.OneToMany;
 import io.ebean.annotation.WhenCreated;
+
+import java.util.ArrayList;
 //import io.ebean.annotation.DbDefault;
 import java.util.List;
 import java.time.Instant;
@@ -28,7 +30,7 @@ public class Url extends Model {
     private Instant createdAt;
 
     @OneToMany
-    private List<UrlCheck> urlChecks;
+    private List<UrlCheck> urlChecks = new ArrayList<>();
 
     public Url(String newProtocol, String newHost, Integer newPort) {
         this.protocol = newProtocol;
@@ -50,6 +52,13 @@ public class Url extends Model {
 
     public final Integer getPort() {
         return port;
+    }
+
+    public final String getPath() {
+        return this.protocol
+            .concat("://")
+            .concat(this.host)
+            .concat(this.port == null ? "" : ":" + this.port);
     }
 
     public final Instant getCreatedAt() {

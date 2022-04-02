@@ -19,6 +19,7 @@ import okhttp3.mockwebserver.MockWebServer;
 import java.io.IOException;
 
 import java.util.List;
+import hexlet.code.model.UrlCheck;
 import hexlet.code.model.Url;
 import hexlet.code.model.query.QUrl;
 
@@ -29,6 +30,8 @@ class AppTest {
     private static MockWebServer mockServer;
     private static MockResponse mockResponse;
     private static String serverBaseUrl;
+    private static String mockHost;
+    private static int mockPort;
 
     @BeforeAll
     public static void beforeAll() {
@@ -41,15 +44,23 @@ class AppTest {
         mockServer = new MockWebServer();
         mockResponse = new MockResponse()
             .addHeader("Content-Type", "text/html;charset=utf-8")
-            .setBody("{}")
+            .setBody(
+"""
+<title> test_title </title>
+<h1 >test_h1</h1>
+<meta name="description" content="test_description with lenght > 10"/>
+"""
+            )
             .setResponseCode(200);
         mockServer.enqueue(mockResponse);
         try {
             mockServer.start();
         } catch (IOException e) {
-
+            System.out.println("can't start mockServer");
         }
         serverBaseUrl = mockServer.url("/").toString();
+        mockHost = (serverBaseUrl.split("/")[2]).split(":")[0];
+        mockPort = Integer.parseInt((serverBaseUrl.split("/")[2]).split(":")[1]);
     }
 
     @AfterAll
@@ -126,8 +137,35 @@ class AppTest {
 
     @Test
     void testCheckUrl() {
-        HttpResponse<String> response = Unirest.get(serverBaseUrl)
+        HttpResponse<String> response1 = Unirest.post("/urls")
+            .field("url", serverBaseUrl)
             .asString();
-        assertThat(response.getStatus()).isEqualTo(200);
+
+        Url url = new QUrl()
+            .host.equalTo(mockHost)
+            .port.equalTo(mockPort)
+            .findOne();
+
+        HttpResponse<String> response2 = Unirest.post("/urls/{id}/checks")
+            .routeParam("id", url.getId().toString())
+            .asString();
+
+        UrlCheck urlCheck = url.getUrlChecks().get(url.getUrlChecks().size() - 1);
+
+        HttpResponse<String> response3 = Unirest.get("/urls/{id}")
+            .routeParam("id", url.getId().toString())
+            .asString();
+        String body = response3.getBody();
+
+        assertThat(body).contains(urlCheck.getId().toString());
+        assertThat(body).contains(urlCheck.getTitle().length() <= 30
+            ? urlCheck.getTitle()
+            : urlCheck.getTitle().substring(0, 9));
+        assertThat(body).contains(urlCheck.getH1().length() <= 30
+            ? urlCheck.getH1()
+            : urlCheck.getH1().substring(0, 9));
+        assertThat(body).contains(urlCheck.getDescription().length() <= 30
+            ? urlCheck.getDescription()
+            : urlCheck.getDescription().substring(0, 9));
     }
 }
