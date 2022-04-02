@@ -23,7 +23,7 @@ public class UrlController {
     };
 
     public static Handler createUrl = ctx -> {
-        URL inputURL = null;
+        URL inputURL;
         String input = ctx.formParam("url");
         try {
             inputURL = new URL(input);

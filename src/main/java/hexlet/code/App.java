@@ -8,12 +8,6 @@ import static io.javalin.apibuilder.ApiBuilder.path;
 import static io.javalin.apibuilder.ApiBuilder.get;
 import static io.javalin.apibuilder.ApiBuilder.post;
 
-// import org.apache.http.client.config.RequestConfig;
-// import org.apache.http.client.HttpClient;
-// import org.apache.http.impl.client.HttpClientBuilder;
-// import org.apache.http.client.config.CookieSpecs;
-// import kong.unirest.Unirest;
-
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import nz.net.ultraq.thymeleaf.layoutdialect.LayoutDialect;
@@ -24,6 +18,8 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 public class App {
+
+    public static final Logger LOGGER = LogManager.getLogger("myLogger");
 
     private static int getPort() {
         String port = System.getenv().getOrDefault("PORT", "5000");
@@ -69,6 +65,7 @@ public class App {
     }
 
     private static void addRoutes(Javalin app) {
+
         app.get("/", UrlController.newUrl);
         app.routes(() -> {
             path("urls", () -> {
@@ -82,7 +79,8 @@ public class App {
         });
     }
 
-     public static void main(String[] args) {
+
+    public static void main(String[] args) {
         PropertyConfigurator.configure("log4j.properties");
 
         Javalin app = getApp();
