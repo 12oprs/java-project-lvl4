@@ -94,7 +94,7 @@ public class UrlController {
             response = Unirest.get(url.getPath())
             .asString();
         } catch (UnirestException e) {
-            ctx.sessionAttribute("flash", "Name or service not known");
+            ctx.sessionAttribute("flash", "Сайт не существует");
             ctx.sessionAttribute("flash-type", "danger");
             ctx.redirect("/urls/" + id);
             return;
@@ -116,6 +116,8 @@ public class UrlController {
                                          url);
         urlCheck.save();
         App.LOGGER.warn("urlChecl_ID:" + urlCheck.getId());
+        ctx.sessionAttribute("flash", "Сайт успешно проверен");
+        ctx.sessionAttribute("flash-type", "success");
         ctx.redirect("/urls/" + id);
     };
 }

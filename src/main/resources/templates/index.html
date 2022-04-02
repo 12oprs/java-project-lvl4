@@ -3,14 +3,14 @@
         layout:decorate="~{layouts/application.html}">
     
     <section layout:fragment="header">
-        Доброго времени суток, глубокоуважаемый Юзер!
+        Анализатор страниц
     </section>
 
     <section layout:fragment="content">
         <form class="row g-3" action="/urls" method="post">
             <div class="mb-3">
                 <label for="Input1" class="form-label">Введи URL</label>
-                <input type="text" name="url" class="form-control" id="Input1"  placeholder="URL" th:value="${url}">
+                <input type="text" name="url" class="form-control" id="Input1"  placeholder="https://www.example.com" th:value="${url}">
             </div>
             <div class="col-auto">
                 <button type="submit" class="btn btn-primary mb-3">Проверить</button>

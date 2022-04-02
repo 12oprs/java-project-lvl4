@@ -7,22 +7,22 @@
     </section>
 
     <section layout:fragment="content">
-        <table class="table table-bordered">
-            <tbody th:object="${url}">
-              <tr>
-                <td>ID</td>
-                <td th:text="*{id}"></td>
-              </tr>
-              <tr>
-                <td>Имя</td>
-                <td th:text="${url.getPath()}" ></td>
-              </tr>
-              <tr>
-                <td>createdAt</td>
-                <td th:text="${#temporals.format(url.getCreatedAt(), 'dd/MMM/yyyy HH:mm')}"></td>
-              </tr>
-            </tbody>
-          </table>
+        <table class="table table-bordered table-hover">
+          <tbody th:object="${url}">
+            <tr>
+              <td>ID</td>
+              <td th:text="*{id}"></td>
+            </tr>
+            <tr>
+              <td>Имя</td>
+              <td th:text="${url.getPath()}" ></td>
+            </tr>
+            <tr>
+              <td>createdAt</td>
+              <td th:text="${#temporals.format(url.getCreatedAt(), 'dd/MMM/yyyy HH:mm')}"></td>
+            </tr>
+          </tbody>
+        </table>
         <p>Проверки</p>
 
         <form class="row g-3" th:action="@{'/urls/' + ${url.getId()} + '/checks'}"  method="post">
@@ -31,7 +31,7 @@
             </div>
         </form>
         
-        <table class="table table-bordered">
+        <table class="table table-bordered table-hover">
             <thead>
                 <tr>
                     <th scope="col">ID</th>
