@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Collectors;
-import java.io.IOException;
 
 import java.util.List;
 import hexlet.code.model.UrlCheck;
@@ -53,7 +52,7 @@ class AppTest {
                 .collect(Collectors.joining());
         } catch (IOException e) {
             e.printStackTrace();
-        }            
+        }
         mockServer = new MockWebServer();
         mockResponse = new MockResponse()
             .addHeader("Content-Type", "text/html;charset=utf-8")
