@@ -17,6 +17,10 @@ import io.ebean.Transaction;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.stream.Collectors;
+import java.io.IOException;
 
 import java.util.List;
 import hexlet.code.model.UrlCheck;
@@ -32,6 +36,7 @@ class AppTest {
     private static String serverBaseUrl;
     private static String mockHost;
     private static int mockPort;
+    private static String body;
 
     @BeforeAll
     public static void beforeAll() {
@@ -41,16 +46,18 @@ class AppTest {
         String baseUrl = "http://localhost:" + port;
         Unirest.config().defaultBaseUrl(baseUrl);
 
+        Paths.get(".").toAbsolutePath().normalize().toString();
+        try {
+            String workDir = Paths.get(".").toAbsolutePath().normalize().toString();
+            body = Files.lines(Paths.get(workDir + "/src/test/resources/test.html"))
+                .collect(Collectors.joining());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }            
         mockServer = new MockWebServer();
         mockResponse = new MockResponse()
             .addHeader("Content-Type", "text/html;charset=utf-8")
-            .setBody(
-"""
-<title> test_title </title>
-<h1 >test_h1</h1>
-<meta name="description" content="test_description with lenght > 10"/>
-"""
-            )
+            .setBody(body)
             .setResponseCode(200);
         mockServer.enqueue(mockResponse);
         try {

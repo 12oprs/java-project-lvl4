@@ -7,6 +7,8 @@ import java.util.List;
 import kong.unirest.Unirest;
 import kong.unirest.HttpResponse;
 import org.jsoup.nodes.Document;
+import java.util.Optional;
+import org.jsoup.nodes.Element;
 import java.util.Objects;
 import kong.unirest.UnirestException;
 import org.jsoup.Jsoup;
@@ -69,8 +71,7 @@ public class UrlController {
     };
 
     public static Handler showUrl = ctx -> {
-        String[] temp = ctx.path().split("/");
-        long id = Long.parseLong(temp[2]);
+        long id = ctx.pathParamAsClass("id", Long.class).getOrDefault(null);
         Url url = new QUrl().id.equalTo(id).findOne();
         if (url == null) {
             ctx.sessionAttribute("flash", "URL не найден");
@@ -84,8 +85,7 @@ public class UrlController {
 
     public static Handler checkUrl = ctx -> {
         HttpResponse<String> response;
-
-        long id = Long.parseLong(ctx.path().split("/")[2]);
+        long id = ctx.pathParamAsClass("id", Long.class).getOrDefault(null);
         Url url = new QUrl()
             .id.equalTo(id)
             .findOne();
@@ -103,11 +103,19 @@ public class UrlController {
         App.LOGGER.warn("body:" + doc.body().toString().substring(0, 20));
         String title = doc.title();
         App.LOGGER.warn("title:" + title);
-        String h1 = Objects.nonNull(doc.selectFirst("h1")) ? doc.selectFirst("h1").text() : "";
+        String h1 = Optional
+            .<Element>ofNullable(doc.selectFirst("h1"))
+            .map(value -> value.text())
+            .orElse("");
         App.LOGGER.warn("h1:" + h1);
-        String description = Objects.nonNull(doc.selectFirst("meta[name=description][content]"))
-            ? doc.selectFirst("meta[name=description][content]").attr("content")
-            : "";
+        String description = Optional
+            .<Element>ofNullable(
+                doc.selectFirst("meta[name=description][content]")
+                .getElementsByAttribute("content")
+                .first()
+            )
+            .map(value -> value.text())
+            .orElse("");
         App.LOGGER.warn("description:" + description);
         UrlCheck urlCheck = new UrlCheck(ctx.status(),
                                          title,
