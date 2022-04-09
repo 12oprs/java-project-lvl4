@@ -13,7 +13,6 @@ import java.time.Instant;
 import io.ebean.Model;
 
 @Entity
-@Table(name = "urls")
 public class Url extends Model {
 
     @Id

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <migration xmlns="http://ebean-orm.github.io/xml/ns/dbmigration">
     <changeSet type="apply">
-        <createTable name="urls" pkName="pk_urls">
+        <createTable name="url" pkName="pk_url">
             <column name="id" type="bigint" primaryKey="true"/>
             <column name="protocol" type="varchar"/>
             <column name="host" type="varchar"/>
@@ -14,7 +14,7 @@
             <column name="title" type="varchar"/>
             <column name="h1" type="varchar"/>
             <column name="description" type="clob"/>
-            <column name="urls_id" type="bigint" notnull="true" references="urls.id" foreignKeyName="fk_url_check_urls_id" foreignKeyIndex="ix_url_check_urls_id"/>
+            <column name="urls_id" type="bigint" notnull="true" references="url.id" foreignKeyName="fk_url_check_urls_id" foreignKeyIndex="ix_url_check_urls_id"/>
             <column name="created_at" type="timestamp" notnull="true"/>
         </createTable>
     </changeSet>
