@@ -3,7 +3,7 @@
         layout:decorate="~{layouts/application.html}">
     
     <section layout:fragment="header">
-        <p th:text="'Сайт ' + ${url.getPath()}"></p>
+        <p th:text="'Сайт ' + ${url.getName()}"></p>
     </section>
 
     <section layout:fragment="content">
@@ -15,7 +15,7 @@
             </tr>
             <tr>
               <td>Имя</td>
-              <td th:text="${url.getPath()}" ></td>
+              <td th:text="${url.getName()}" ></td>
             </tr>
             <tr>
               <td>createdAt</td>

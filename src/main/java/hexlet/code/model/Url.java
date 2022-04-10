@@ -17,12 +17,7 @@ public class Url extends Model {
     @Id
     private long id;
 
-    private String protocol;
-
-    private String host;
-
-    //@DbDefault("433")
-    private Integer port;
+    private String name;
 
     @WhenCreated
     private Instant createdAt;
@@ -30,33 +25,16 @@ public class Url extends Model {
     @OneToMany
     private List<UrlCheck> urlChecks = new ArrayList<>();
 
-    public Url(String newProtocol, String newHost, Integer newPort) {
-        this.protocol = newProtocol;
-        this.host = newHost;
-        this.port = newPort;
+    public Url(String newName) {
+        this.name = newName;
     }
 
     public final Long getId() {
         return id;
     }
 
-    public final String getProtocol() {
-        return protocol;
-    }
-
-    public final String getHost() {
-        return host;
-    }
-
-    public final Integer getPort() {
-        return port;
-    }
-
-    public final String getPath() {
-        return this.protocol
-            .concat("://")
-            .concat(this.host)
-            .concat(this.port == null ? "" : ":" + this.port);
+    public final String getName() {
+        return name;
     }
 
     public final Instant getCreatedAt() {

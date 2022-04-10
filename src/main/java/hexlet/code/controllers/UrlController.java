@@ -38,12 +38,10 @@ public class UrlController {
         }
         String protocol = inputURL.getProtocol();
         String host = inputURL.getHost();
-        Integer port = inputURL.getPort() == -1 ? null : inputURL.getPort();
-        Url newUrl = new Url(protocol, host, port);
+        String port = inputURL.getPort() == -1 ? "" : ":" + inputURL.getPort();
+        Url newUrl = new Url(protocol + "://" + host + port);
         boolean urlExist = new QUrl()
-            .protocol.equalTo(newUrl.getProtocol())
-            .host.equalTo(newUrl.getHost())
-            .port.equalTo(newUrl.getPort())
+            .name.equalTo(newUrl.getName())
             .exists();
 
         if (urlExist) {
@@ -56,7 +54,6 @@ public class UrlController {
 
         }
         newUrl.save();
-        ctx.status(200);
         ctx.sessionAttribute("flash", "Страница успешно добавлена");
         ctx.sessionAttribute("flash-type", "success");
         ctx.redirect("/urls");
@@ -88,14 +85,14 @@ public class UrlController {
         Url url = new QUrl()
             .id.equalTo(id)
             .findOne();
-        App.LOGGER.warn("path:" + url.getPath());
+        App.LOGGER.warn("path:" + url.getName());
         try {
-            response = Unirest.get(url.getPath())
+            response = Unirest.get(url.getName())
             .asString();
         } catch (UnirestException e) {
             ctx.sessionAttribute("flash", "Сайт не существует");
             ctx.sessionAttribute("flash-type", "danger");
-            ctx.redirect("/urls/" + id);
+            ctx.redirect("/urls/" + id, 404);
             return;
         }
         Document doc = Jsoup.parse(response.getBody());
@@ -115,7 +112,7 @@ public class UrlController {
                 .text())
             .orElse("");
         App.LOGGER.warn("description:" + description);
-        UrlCheck urlCheck = new UrlCheck(ctx.status(),
+        UrlCheck urlCheck = new UrlCheck(response.getStatus(),
                                          title,
                                          h1,
                                          description,

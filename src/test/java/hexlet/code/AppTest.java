@@ -26,6 +26,7 @@ import hexlet.code.model.UrlCheck;
 import hexlet.code.model.Url;
 import hexlet.code.model.query.QUrl;
 
+
 class AppTest {
 
     private static Javalin app;
@@ -33,8 +34,6 @@ class AppTest {
     private static MockWebServer mockServer;
     private static MockResponse mockResponse;
     private static String serverBaseUrl;
-    private static String mockHost;
-    private static int mockPort;
     private static String responseBody;
 
     @BeforeAll
@@ -65,8 +64,6 @@ class AppTest {
             System.out.println("can't start mockServer");
         }
         serverBaseUrl = mockServer.url("/").toString();
-        mockHost = (serverBaseUrl.split("/")[2]).split(":")[0];
-        mockPort = Integer.parseInt((serverBaseUrl.split("/")[2]).split(":")[1]);
     }
 
     @AfterAll
@@ -138,29 +135,32 @@ class AppTest {
             .routeParam("id", id)
             .asString();
         assertThat(response.getStatus()).isEqualTo(200);
-        assertThat(response.getBody()).contains(listUrl.get(randomIndex).getHost());
+        assertThat(response.getBody()).contains(listUrl.get(randomIndex).getName());
     }
 
     @Test
-    void testCheckUrl() {
+    void testCheckUrlPositive() {
+
         HttpResponse<String> response1 = Unirest.post("/urls")
             .field("url", serverBaseUrl)
             .asString();
+        assertThat(response1.getStatus()).isEqualTo(302);
 
-        Url url = new QUrl()
-            .host.equalTo(mockHost)
-            .port.equalTo(mockPort)
-            .findOne();
+        Url url = new QUrl().name.contains("localhost").findOne();
+        System.out.println(url.getName());
+        System.out.println(url.getId());
 
         HttpResponse<String> response2 = Unirest.post("/urls/{id}/checks")
             .routeParam("id", url.getId().toString())
             .asString();
+        assertThat(response2.getStatus()).isEqualTo(302);
 
         UrlCheck urlCheck = url.getUrlChecks().get(url.getUrlChecks().size() - 1);
 
         HttpResponse<String> response3 = Unirest.get("/urls/{id}")
             .routeParam("id", url.getId().toString())
             .asString();
+        assertThat(response3.getStatus()).isEqualTo(200);
         String body = response3.getBody();
 
         assertThat(body).contains(urlCheck.getId().toString());
@@ -173,5 +173,20 @@ class AppTest {
         assertThat(body).contains(urlCheck.getDescription().length() <= 30
             ? urlCheck.getDescription()
             : urlCheck.getDescription().substring(0, 9));
+    }
+
+    @Test
+    void testCheckUrlNegative() {
+        HttpResponse<String> response1 = Unirest.post("/urls")
+            .field("url", "http://test.test:123")
+            .asString();
+        assertThat(response1.getStatus()).isEqualTo(302);
+
+        Url url = new QUrl().name.contains("test").findOne();
+
+        HttpResponse<String> response2 = Unirest.post("/urls/{id}/checks")
+            .routeParam("id", url.getId().toString())
+            .asString();
+        assertThat(response2.getStatus()).isEqualTo(404);
     }
 }
