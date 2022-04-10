@@ -119,7 +119,7 @@ public class UrlController {
                                          url);
         urlCheck.save();
         App.LOGGER.warn("urlChecl_ID:" + urlCheck.getId());
-        ctx.sessionAttribute("flash", "Сайт успешно проверен");
+        ctx.sessionAttribute("flash", "Страница успешно проверена");
         ctx.sessionAttribute("flash-type", "success");
         ctx.redirect("/urls/" + id);
     };
