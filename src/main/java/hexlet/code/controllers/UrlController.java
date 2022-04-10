@@ -105,11 +105,10 @@ public class UrlController {
             .orElse("");
         App.LOGGER.warn("h1:" + h1);
         String description = Optional
-            .<Element>ofNullable(doc.selectFirst("meta[name=description][content]"))
+            .<Element>ofNullable(doc.selectFirst("meta[name=description]"))
             .map(value -> value
-                .getElementsByAttribute("content")
-                .first()
-                .text())
+                .attributes()
+                .get("content"))
             .orElse("");
         App.LOGGER.warn("description:" + description);
         UrlCheck urlCheck = new UrlCheck(response.getStatus(),
@@ -118,7 +117,7 @@ public class UrlController {
                                          description,
                                          url);
         urlCheck.save();
-        App.LOGGER.warn("urlChecl_ID:" + urlCheck.getId());
+        App.LOGGER.warn("urlCheck_ID:" + urlCheck.getId());
         ctx.sessionAttribute("flash", "Страница успешно проверена");
         ctx.sessionAttribute("flash-type", "success");
         ctx.redirect("/urls/" + id);
