@@ -2,7 +2,6 @@ package hexlet.code.model;
 
 import javax.persistence.Id;
 import javax.persistence.Entity;
-import javax.persistence.Table;
 import javax.persistence.OneToMany;
 import io.ebean.annotation.WhenCreated;
 

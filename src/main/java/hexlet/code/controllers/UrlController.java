@@ -108,12 +108,11 @@ public class UrlController {
             .orElse("");
         App.LOGGER.warn("h1:" + h1);
         String description = Optional
-            .<Element>ofNullable(
-                doc.selectFirst("meta[name=description][content]")
+            .<Element>ofNullable(doc.selectFirst("meta[name=description][content]"))
+            .map(value -> value
                 .getElementsByAttribute("content")
                 .first()
-            )
-            .map(value -> value.text())
+                .text())
             .orElse("");
         App.LOGGER.warn("description:" + description);
         UrlCheck urlCheck = new UrlCheck(ctx.status(),

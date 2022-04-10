@@ -35,7 +35,7 @@ class AppTest {
     private static String serverBaseUrl;
     private static String mockHost;
     private static int mockPort;
-    private static String body;
+    private static String responseBody;
 
     @BeforeAll
     public static void beforeAll() {
@@ -48,7 +48,7 @@ class AppTest {
         Paths.get(".").toAbsolutePath().normalize().toString();
         try {
             String workDir = Paths.get(".").toAbsolutePath().normalize().toString();
-            body = Files.lines(Paths.get(workDir + "/src/test/resources/test.html"))
+            responseBody = Files.lines(Paths.get(workDir + "/src/test/resources/test.html"))
                 .collect(Collectors.joining());
         } catch (IOException e) {
             e.printStackTrace();
@@ -56,7 +56,7 @@ class AppTest {
         mockServer = new MockWebServer();
         mockResponse = new MockResponse()
             .addHeader("Content-Type", "text/html;charset=utf-8")
-            .setBody(body)
+            .setBody(responseBody)
             .setResponseCode(200);
         mockServer.enqueue(mockResponse);
         try {
