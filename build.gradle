@@ -25,6 +25,7 @@ compileJava {
 dependencies {
   implementation 'io.javalin:javalin:4.3.0'
   implementation 'org.slf4j:slf4j-log4j12:1.7.36'
+  testImplementation 'org.slf4j:slf4j-log4j12:1.7.36'
 
   implementation 'org.thymeleaf:thymeleaf:3.0.15.RELEASE'
   implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.1.0'

@@ -4,7 +4,6 @@ import javax.persistence.Id;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Lob;
-import javax.persistence.JoinColumn;
 import io.ebean.annotation.WhenCreated;
 import io.ebean.annotation.DbDefault;
 import java.time.Instant;
@@ -26,7 +25,7 @@ public class UrlCheck extends Model {
     @Lob
     private String description;
 
-    @ManyToOne(optional = false) @JoinColumn(name = "urls_id")
+    @ManyToOne(optional = false)
     private Url url;
 
     @WhenCreated

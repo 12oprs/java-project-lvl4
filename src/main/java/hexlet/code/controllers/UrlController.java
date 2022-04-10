@@ -92,7 +92,7 @@ public class UrlController {
         } catch (UnirestException e) {
             ctx.sessionAttribute("flash", "Сайт не существует");
             ctx.sessionAttribute("flash-type", "danger");
-            ctx.redirect("/urls/" + id, 404);
+            ctx.redirect("/urls/" + id);
             return;
         }
         Document doc = Jsoup.parse(response.getBody());

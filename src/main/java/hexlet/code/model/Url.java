@@ -4,9 +4,9 @@ import javax.persistence.Id;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import io.ebean.annotation.WhenCreated;
+import javax.persistence.CascadeType;
 
 import java.util.ArrayList;
-//import io.ebean.annotation.DbDefault;
 import java.util.List;
 import java.time.Instant;
 import io.ebean.Model;
@@ -22,7 +22,7 @@ public class Url extends Model {
     @WhenCreated
     private Instant createdAt;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<UrlCheck> urlChecks = new ArrayList<>();
 
     public Url(String newName) {

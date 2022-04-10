@@ -26,6 +26,10 @@ import hexlet.code.model.UrlCheck;
 import hexlet.code.model.Url;
 import hexlet.code.model.query.QUrl;
 
+import org.apache.log4j.PropertyConfigurator;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 
 class AppTest {
 
@@ -35,9 +39,12 @@ class AppTest {
     private static MockResponse mockResponse;
     private static String serverBaseUrl;
     private static String responseBody;
+    public static final Logger LOGGER = LogManager.getLogger("myLogger");
 
     @BeforeAll
     public static void beforeAll() {
+        PropertyConfigurator.configure("log4j.properties");
+
         app = App.getApp();
         app.start(0);
         int port = app.port();
@@ -187,6 +194,6 @@ class AppTest {
         HttpResponse<String> response2 = Unirest.post("/urls/{id}/checks")
             .routeParam("id", url.getId().toString())
             .asString();
-        assertThat(response2.getStatus()).isEqualTo(404);
+        assertThat(response2.getStatus()).isEqualTo(302);
     }
 }
